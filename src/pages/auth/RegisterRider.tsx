@@ -74,7 +74,7 @@ const RegisterRider = () => {
           firstName: '',
           lastName: '',
           email: '',
-          phoneNumber: '',
+          phone: '',
           plateNumber: '',
           ResidencyAddress: '',
           password: '',
@@ -89,49 +89,49 @@ const RegisterRider = () => {
               <FormControl isInvalid={!!errors.firstName && !!touched.firstName}>
                 <FormLabel>First Name</FormLabel>
                 <Field as={Input} id="firstName" name="firstName" />
-                <FormErrorMessage>{errors.firstName}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.firstName === 'string' ? errors.firstName : ''}</FormErrorMessage>
               </FormControl>
               
               <FormControl isInvalid={!!errors.lastName && !!touched.lastName}>
                 <FormLabel>Last Name</FormLabel>
                 <Field as={Input} id="lastName" name="lastName" />
-                <FormErrorMessage>{errors.lastName}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.lastName === 'string' ? errors.lastName : ''}</FormErrorMessage>
               </FormControl>
               
               <FormControl isInvalid={!!errors.email && !!touched.email}>
                 <FormLabel>Email</FormLabel>
                 <Field as={Input} id="email" name="email" type="email" />
-                <FormErrorMessage>{errors.email}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.email === 'string' ? errors.email : ''}</FormErrorMessage>
               </FormControl>
               
               <FormControl isInvalid={!!errors.phoneNumber && !!touched.phoneNumber}>
                 <FormLabel>Phone Number</FormLabel>
                 <Field as={Input} id="phoneNumber" name="phoneNumber" />
-                <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.phoneNumber === 'string' ? errors.phoneNumber : ''}</FormErrorMessage>
               </FormControl>
               
               <FormControl isInvalid={!!errors.plateNumber && !!touched.plateNumber}>
                 <FormLabel>Motorcycle Plate Number</FormLabel>
                 <Field as={Input} id="plateNumber" name="plateNumber" />
-                <FormErrorMessage>{errors.plateNumber}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.plateNumber === 'string' ? errors.plateNumber : ''}</FormErrorMessage>
               </FormControl>
               
               <FormControl isInvalid={!!errors.ResidencyAddress && !!touched.ResidencyAddress}>
                 <FormLabel>Residency Address</FormLabel>
                 <Field as={Input} id="ResidencyAddress" name="ResidencyAddress" />
-                <FormErrorMessage>{errors.ResidencyAddress}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.ResidencyAddress === 'string' ? errors.ResidencyAddress : ''}</FormErrorMessage>
               </FormControl>
               
               <FormControl isInvalid={!!errors.password && !!touched.password}>
                 <FormLabel>Password</FormLabel>
                 <Field as={Input} id="password" name="password" type="password" />
-                <FormErrorMessage>{errors.password}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.password === 'string' ? errors.password : ''}</FormErrorMessage>
               </FormControl>
               
               <FormControl isInvalid={!!errors.confirmPassword && !!touched.confirmPassword}>
                 <FormLabel>Confirm Password</FormLabel>
                 <Field as={Input} id="confirmPassword" name="confirmPassword" type="password" />
-                <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+                <FormErrorMessage>{typeof errors.confirmPassword === 'string' ? errors.confirmPassword : ''}</FormErrorMessage>
               </FormControl>
               
               <Button

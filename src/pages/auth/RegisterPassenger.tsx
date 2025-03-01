@@ -1,4 +1,3 @@
-// src/pages/auth/RegisterPassenger.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
@@ -9,11 +8,23 @@ import {
 } from '@chakra-ui/react';
 import { registerPassenger } from '../../api/auth';
 
+// Define an interface that matches your backend expectations
+interface PassengerFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string; // Matches backend
+  ResidencyAddress: string; // Matches backend (with capital R)
+  password: string;
+  confirmPassword: string;
+}
+
 const RegisterSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
-  phone: Yup.string().required('Phone number is required'),
+  phoneNumber: Yup.string().required('Phone number is required'), // Changed from phone to phoneNumber
+  ResidencyAddress: Yup.string().required('Residency address is required'), // Make sure casing matches backend
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
     .required('Password is required'),
@@ -27,7 +38,7 @@ const RegisterPassenger = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = async (values: { firstName: string; lastName: string; email: string; phone: string; password: string; confirmPassword: string; }) => {
+  const handleSubmit = async (values: PassengerFormValues) => {
     if (values.password !== values.confirmPassword) {
       toast({
         title: 'Passwords do not match',
@@ -42,6 +53,8 @@ const RegisterPassenger = () => {
       // Remove confirmPassword before sending to API
       const { confirmPassword, ...passengerData } = values;
       
+      console.log('Sending passenger data:', passengerData); // Debug
+      
       await registerPassenger(passengerData);
       
       toast({
@@ -53,9 +66,11 @@ const RegisterPassenger = () => {
       
       navigate('/auth/login');
     } catch (error: any) {
+      console.error('Registration error:', error.response?.data || error); // Debug
+      
       toast({
         title: 'Registration failed',
-        description: error.response?.data?.error || 'An error occurred',
+        description: error.response?.data?.message || error.response?.data?.error || 'An error occurred',
         status: 'error',
         duration: 5000,
       });
@@ -73,7 +88,8 @@ const RegisterPassenger = () => {
           firstName: '',
           lastName: '',
           email: '',
-          phone: '',
+          phoneNumber: '', // Changed from phone to phoneNumber
+          ResidencyAddress: '', // Ensure this matches backend (with capital R)
           password: '',
           confirmPassword: ''
         }}
@@ -83,37 +99,43 @@ const RegisterPassenger = () => {
         {({ errors, touched }) => (
           <Form>
             <VStack spacing={4}>
-              <FormControl isInvalid={!!errors.firstName && touched.firstName}>
+              <FormControl isInvalid={!!errors.firstName && !!touched.firstName}>
                 <FormLabel>First Name</FormLabel>
                 <Field as={Input} id="firstName" name="firstName" />
                 <FormErrorMessage>{errors.firstName}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={!!errors.lastName && touched.lastName}>
+              <FormControl isInvalid={!!errors.lastName && !!touched.lastName}>
                 <FormLabel>Last Name</FormLabel>
                 <Field as={Input} id="lastName" name="lastName" />
                 <FormErrorMessage>{errors.lastName}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={!!errors.email && touched.email}>
+              <FormControl isInvalid={!!errors.email && !!touched.email}>
                 <FormLabel>Email</FormLabel>
                 <Field as={Input} id="email" name="email" type="email" />
                 <FormErrorMessage>{errors.email}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={!!errors.phone && touched.phone}>
+              <FormControl isInvalid={!!errors.phoneNumber && !!touched.phoneNumber}>
                 <FormLabel>Phone Number</FormLabel>
-                <Field as={Input} id="phone" name="phone" />
-                <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                <Field as={Input} id="phoneNumber" name="phoneNumber" />
+                <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={!!errors.password && touched.password}>
+              <FormControl isInvalid={!!errors.ResidencyAddress && !!touched.ResidencyAddress}>
+                <FormLabel>Residency Address</FormLabel>
+                <Field as={Input} id="ResidencyAddress" name="ResidencyAddress" />
+                <FormErrorMessage>{errors.ResidencyAddress}</FormErrorMessage>
+              </FormControl>
+              
+              <FormControl isInvalid={!!errors.password && !!touched.password}>
                 <FormLabel>Password</FormLabel>
                 <Field as={Input} id="password" name="password" type="password" />
                 <FormErrorMessage>{errors.password}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={!!errors.confirmPassword && touched.confirmPassword}>
+              <FormControl isInvalid={!!errors.confirmPassword && !!touched.confirmPassword}>
                 <FormLabel>Confirm Password</FormLabel>
                 <Field as={Input} id="confirmPassword" name="confirmPassword" type="password" />
                 <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
