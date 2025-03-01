@@ -3,7 +3,6 @@ import client from './client';
 export interface PackageData {
   recipientName: string;
   recipientPhone: string;
-  recipientEmail: string;
   pickupLocation: string;
   deliveryLocation: string;
   description: string;
@@ -97,8 +96,20 @@ export const getPackage = async (id: string) => {
 };
 
 export const getRiderPackages = async () => {
-  const response = await client.get('/packages/rider');
-  return response.data;
+  try {
+    console.log('Fetching packages for rider...');
+    const response = await client.get('/packages/rider');
+    
+    if (response.data && response.data.data) {
+      return response.data.data;
+    }
+    
+    return response.data || [];
+  } catch (error) {
+    console.error('Error fetching rider packages:', error);
+    // Return empty array instead of throwing
+    return [];
+  }
 };
 
 
