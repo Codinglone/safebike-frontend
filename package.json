@@ -10,8 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@tanstack/react-query": "^5.66.11",
+    "axios": "^1.8.1",
+    "formik": "^2.4.6",
+    "framer-motion": "^12.4.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.2.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
