@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Formik, Form, Field, FormikErrors } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { 
   Box, Button, FormControl, FormLabel, Input, 
@@ -46,7 +46,7 @@ const Login = () => {
       } else if (values.userType === 'rider') {
         navigate('/rider');
       }
-    } catch (error: any) { // Type error as any for now
+    } catch (error: any) {
       toast({
         title: 'Login failed',
         description: error.response?.data?.error || 'An error occurred',
@@ -62,11 +62,11 @@ const Login = () => {
     <Box maxW="md" mx="auto" mt={8} p={6} borderWidth={1} borderRadius="lg" boxShadow="lg">
       <Heading mb={6} textAlign="center">Login</Heading>
       <Formik
-        initialValues={{ email: '', password: '', userType: 'passenger' as const }}
+        initialValues={{ email: '', password: '', userType: 'passenger' }}
         validationSchema={LoginSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, values, setFieldValue }) => (
           <Form>
             <VStack spacing={4}>
               <FormControl isInvalid={!!errors.email && !!touched.email}>
@@ -83,16 +83,15 @@ const Login = () => {
               
               <FormControl isInvalid={!!errors.userType && !!touched.userType}>
                 <FormLabel>I am a:</FormLabel>
-                <Field name="userType">
-                  {({ field }: { field: any }) => (
-                    <RadioGroup {...field}>
-                      <Stack direction="row">
-                        <Radio value="passenger">Passenger</Radio>
-                        <Radio value="rider">Rider</Radio>
-                      </Stack>
-                    </RadioGroup>
-                  )}
-                </Field>
+                <RadioGroup 
+                  onChange={(val) => setFieldValue('userType', val)} 
+                  value={values.userType}
+                >
+                  <Stack direction="row">
+                    <Radio value="passenger">Passenger</Radio>
+                    <Radio value="rider">Rider</Radio>
+                  </Stack>
+                </RadioGroup>
                 <FormErrorMessage>{errors.userType}</FormErrorMessage>
               </FormControl>
               
