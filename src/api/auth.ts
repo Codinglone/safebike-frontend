@@ -14,3 +14,13 @@ export const registerRider = async (riderData: { firstName: string; lastName: st
   const response = await client.post('/biker/create', riderData);
   return response.data;
 };
+
+export const getRiderProfile = async () => {
+  try {
+    const response = await client.get('/riders/profile');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching rider profile:', error);
+    throw error;
+  }
+};

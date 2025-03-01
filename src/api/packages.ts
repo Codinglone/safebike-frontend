@@ -24,6 +24,21 @@ export const createPackage = async (packageData: { recipientName: string; recipi
   return response.data;
 };
 
+export const assignPackage = async (packageId: number | string, riderId?: number) => {
+  try {
+    console.log(`Assigning package ${packageId} to rider ${riderId}`);
+    
+    const response = await client.post(`/packages/${packageId}/assign`, { 
+      riderId: riderId // Send the rider ID
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error assigning package:', error);
+    throw error;
+  }
+};
+
 export const getMyPackages = async () => {
   try {
     console.log('Fetching packages for passenger...');
@@ -86,10 +101,7 @@ export const getRiderPackages = async () => {
   return response.data;
 };
 
-export const assignPackage = async (packageId: string, plateNumber: string) => {
-  const response = await client.post(`/packages/${packageId}/assign`, { plateNumber });
-  return response.data;
-};
+
 
 export const confirmPickup = async (packageId: string) => {
   const response = await client.post(`/packages/${packageId}/pickup`, {});

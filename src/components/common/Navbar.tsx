@@ -23,6 +23,12 @@ const passengerLinks = [
   { name: "My Packages", path: "/passenger/packages" },
 ];
 
+const riderLinks = [
+  { name: "Dashboard", path: "/rider" },
+  { name: "Available Packages", path: "/rider/packages/available" },
+  { name: "My Deliveries", path: "/rider/deliveries" },
+];
+
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const { isAuthenticated, user, logout, userType } = useAuth();
@@ -121,15 +127,6 @@ const Navbar = () => {
                 </>
               )}
 
-              {userType === "passenger" && (
-                <>
-                  {passengerLinks.map((link) => (
-                    <NavLink key={link.path} to={link.path}>
-                      {link.name}
-                    </NavLink>
-                  ))}
-                </>
-              )}
 
               {isAuthenticated && userType === "rider" && (
                 <>
