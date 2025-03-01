@@ -1,4 +1,3 @@
-// src/components/common/PrivateRoute.tsx
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContexts';
 
@@ -16,7 +15,8 @@ const PrivateRoute = ({ children, allowedUserType }: PrivateRouteProps) => {
   
   const allowedTypes = Array.isArray(allowedUserType) ? allowedUserType : [allowedUserType];
   
-  if (!allowedTypes.includes(userType)) {
+  // Fix the type error by checking if userType is not null before using includes
+  if (userType && !allowedTypes.includes(userType)) {
     // Redirect to appropriate dashboard based on user type
     if (userType === 'passenger') {
       return <Navigate to="/passenger" />;

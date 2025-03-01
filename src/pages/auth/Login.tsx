@@ -1,7 +1,6 @@
-// src/pages/auth/Login.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FormikErrors } from 'formik';
 import * as Yup from 'yup';
 import { 
   Box, Button, FormControl, FormLabel, Input, 
@@ -10,6 +9,12 @@ import {
 } from '@chakra-ui/react';
 import { login } from '../../api/auth';
 import { useAuth } from '../../contexts/AuthContexts';
+
+interface LoginFormValues {
+  email: string;
+  password: string;
+  userType: 'passenger' | 'rider';
+}
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -23,7 +28,7 @@ const Login = () => {
   const { login: authLogin } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: LoginFormValues) => {
     setIsSubmitting(true);
     try {
       const response = await login(values.email, values.password, values.userType);
@@ -41,7 +46,7 @@ const Login = () => {
       } else if (values.userType === 'rider') {
         navigate('/rider');
       }
-    } catch (error) {
+    } catch (error: any) { // Type error as any for now
       toast({
         title: 'Login failed',
         description: error.response?.data?.error || 'An error occurred',
@@ -57,29 +62,29 @@ const Login = () => {
     <Box maxW="md" mx="auto" mt={8} p={6} borderWidth={1} borderRadius="lg" boxShadow="lg">
       <Heading mb={6} textAlign="center">Login</Heading>
       <Formik
-        initialValues={{ email: '', password: '', userType: 'passenger' }}
+        initialValues={{ email: '', password: '', userType: 'passenger' as const }}
         validationSchema={LoginSchema}
         onSubmit={handleSubmit}
       >
         {({ errors, touched }) => (
           <Form>
             <VStack spacing={4}>
-              <FormControl isInvalid={errors.email && touched.email}>
+              <FormControl isInvalid={!!errors.email && !!touched.email}>
                 <FormLabel>Email</FormLabel>
                 <Field as={Input} id="email" name="email" type="email" />
                 <FormErrorMessage>{errors.email}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.password && touched.password}>
+              <FormControl isInvalid={!!errors.password && !!touched.password}>
                 <FormLabel>Password</FormLabel>
                 <Field as={Input} id="password" name="password" type="password" />
                 <FormErrorMessage>{errors.password}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.userType && touched.userType}>
+              <FormControl isInvalid={!!errors.userType && !!touched.userType}>
                 <FormLabel>I am a:</FormLabel>
                 <Field name="userType">
-                  {({ field }) => (
+                  {({ field }: { field: any }) => (
                     <RadioGroup {...field}>
                       <Stack direction="row">
                         <Radio value="passenger">Passenger</Radio>

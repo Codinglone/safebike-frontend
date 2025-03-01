@@ -8,7 +8,7 @@ import {
   NumberInputField, NumberInputStepper, NumberIncrementStepper,
   NumberDecrementStepper
 } from '@chakra-ui/react';
-import { createPackage } from '../../api/packages';
+import { createPackage, PackageData } from '../../api/packages';
 
 const CreatePackageSchema = Yup.object().shape({
   recipientName: Yup.string().required('Recipient name is required'),
@@ -25,7 +25,7 @@ const CreatePackage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: PackageData) => {
     setIsSubmitting(true);
     try {
       await createPackage(values);
@@ -38,7 +38,7 @@ const CreatePackage = () => {
       });
       
       navigate('/passenger/packages');
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Failed to create package',
         description: error.response?.data?.error || 'An error occurred',
@@ -70,46 +70,46 @@ const CreatePackage = () => {
         {({ errors, touched, setFieldValue }) => (
           <Form>
             <VStack spacing={4} align="stretch">
-              <FormControl isInvalid={errors.recipientName && touched.recipientName}>
+              <FormControl isInvalid={!!errors.recipientName && !!touched.recipientName}>
                 <FormLabel>Recipient Name</FormLabel>
                 <Field as={Input} id="recipientName" name="recipientName" />
                 <FormErrorMessage>{errors.recipientName}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.recipientPhone && touched.recipientPhone}>
+              <FormControl isInvalid={!!errors.recipientPhone && !!touched.recipientPhone}>
                 <FormLabel>Recipient Phone</FormLabel>
                 <Field as={Input} id="recipientPhone" name="recipientPhone" />
                 <FormErrorMessage>{errors.recipientPhone}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.recipientEmail && touched.recipientEmail}>
+              <FormControl isInvalid={!!errors.recipientEmail && !!touched.recipientEmail}>
                 <FormLabel>Recipient Email</FormLabel>
                 <Field as={Input} id="recipientEmail" name="recipientEmail" type="email" />
                 <FormErrorMessage>{errors.recipientEmail}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.pickupLocation && touched.pickupLocation}>
+              <FormControl isInvalid={!!errors.pickupLocation && !!touched.pickupLocation}>
                 <FormLabel>Pickup Location</FormLabel>
                 <Field as={Input} id="pickupLocation" name="pickupLocation" />
                 <FormErrorMessage>{errors.pickupLocation}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.deliveryLocation && touched.deliveryLocation}>
+              <FormControl isInvalid={!!errors.deliveryLocation && !!touched.deliveryLocation}>
                 <FormLabel>Delivery Location</FormLabel>
                 <Field as={Input} id="deliveryLocation" name="deliveryLocation" />
                 <FormErrorMessage>{errors.deliveryLocation}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.description && touched.description}>
+              <FormControl isInvalid={!!errors.description && !!touched.description}>
                 <FormLabel>Package Description</FormLabel>
                 <Field as={Textarea} id="description" name="description" />
                 <FormErrorMessage>{errors.description}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.estimatedValue && touched.estimatedValue}>
+              <FormControl isInvalid={!!errors.estimatedValue && !!touched.estimatedValue}>
                 <FormLabel>Estimated Value (RWF)</FormLabel>
                 <Field name="estimatedValue">
-                  {({ field }) => (
+                  {({ field }: { field: any }) => (
                     <NumberInput
                       min={0}
                       onChange={(valueString) => setFieldValue('estimatedValue', parseFloat(valueString))}

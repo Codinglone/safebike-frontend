@@ -1,3 +1,4 @@
+// src/pages/auth/RegisterRider.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
@@ -28,7 +29,7 @@ const RegisterRider = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: { firstName: string; lastName: string; email: string; phone: string; plateNumber: string; licenseNumber: string; password: string; confirmPassword: string; }) => {
     if (values.password !== values.confirmPassword) {
       toast({
         title: 'Passwords do not match',
@@ -53,7 +54,7 @@ const RegisterRider = () => {
       });
       
       navigate('/auth/login');
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Registration failed',
         description: error.response?.data?.error || 'An error occurred',
@@ -86,49 +87,49 @@ const RegisterRider = () => {
         {({ errors, touched }) => (
           <Form>
             <VStack spacing={4}>
-              <FormControl isInvalid={errors.firstName && touched.firstName}>
+              <FormControl isInvalid={!!errors.firstName && touched.firstName}>
                 <FormLabel>First Name</FormLabel>
                 <Field as={Input} id="firstName" name="firstName" />
                 <FormErrorMessage>{errors.firstName}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.lastName && touched.lastName}>
+              <FormControl isInvalid={!!errors.lastName && touched.lastName}>
                 <FormLabel>Last Name</FormLabel>
                 <Field as={Input} id="lastName" name="lastName" />
                 <FormErrorMessage>{errors.lastName}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.email && touched.email}>
+              <FormControl isInvalid={!!errors.email && touched.email}>
                 <FormLabel>Email</FormLabel>
                 <Field as={Input} id="email" name="email" type="email" />
                 <FormErrorMessage>{errors.email}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.phone && touched.phone}>
+              <FormControl isInvalid={!!errors.phone && touched.phone}>
                 <FormLabel>Phone Number</FormLabel>
                 <Field as={Input} id="phone" name="phone" />
                 <FormErrorMessage>{errors.phone}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.plateNumber && touched.plateNumber}>
+              <FormControl isInvalid={!!errors.plateNumber && touched.plateNumber}>
                 <FormLabel>Motorcycle Plate Number</FormLabel>
                 <Field as={Input} id="plateNumber" name="plateNumber" />
                 <FormErrorMessage>{errors.plateNumber}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.licenseNumber && touched.licenseNumber}>
+              <FormControl isInvalid={!!errors.licenseNumber && touched.licenseNumber}>
                 <FormLabel>License Number</FormLabel>
                 <Field as={Input} id="licenseNumber" name="licenseNumber" />
                 <FormErrorMessage>{errors.licenseNumber}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.password && touched.password}>
+              <FormControl isInvalid={!!errors.password && touched.password}>
                 <FormLabel>Password</FormLabel>
                 <Field as={Input} id="password" name="password" type="password" />
                 <FormErrorMessage>{errors.password}</FormErrorMessage>
               </FormControl>
               
-              <FormControl isInvalid={errors.confirmPassword && touched.confirmPassword}>
+              <FormControl isInvalid={!!errors.confirmPassword && touched.confirmPassword}>
                 <FormLabel>Confirm Password</FormLabel>
                 <Field as={Input} id="confirmPassword" name="confirmPassword" type="password" />
                 <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>

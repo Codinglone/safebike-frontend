@@ -1,6 +1,16 @@
 import client from './client';
 
-export const createPackage = async (packageData) => {
+export interface PackageData {
+  recipientName: string;
+  recipientPhone: string;
+  recipientEmail: string;
+  pickupLocation: string;
+  deliveryLocation: string;
+  description: string;
+  estimatedValue: number;
+}
+
+export const createPackage = async (packageData: { recipientName: string; recipientPhone: string; recipientEmail: string; pickupLocation: string; deliveryLocation: string; description: string; estimatedValue: number; }) => {
   const response = await client.post('/packages', packageData);
   return response.data;
 };

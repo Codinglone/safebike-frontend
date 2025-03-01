@@ -1,4 +1,4 @@
-import { Box, Button, Container, Heading, Text, VStack, Image, SimpleGrid } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Text, VStack, SimpleGrid } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Home = () => {

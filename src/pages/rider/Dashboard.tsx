@@ -1,4 +1,4 @@
-import { Box, Heading, Text, SimpleGrid, Stat, StatLabel, StatNumber, StatGroup, Card, CardBody } from '@chakra-ui/react';
+import { Box, Heading, Text, SimpleGrid, Stat, StatLabel, StatNumber, Card, CardBody } from '@chakra-ui/react';
 
 const RiderDashboard = () => {
   return (
