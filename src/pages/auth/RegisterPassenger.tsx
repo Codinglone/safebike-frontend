@@ -23,8 +23,8 @@ const RegisterSchema = Yup.object().shape({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
-  phoneNumber: Yup.string().required('Phone number is required'), // Changed from phone to phoneNumber
-  ResidencyAddress: Yup.string().required('Residency address is required'), // Make sure casing matches backend
+  phoneNumber: Yup.string().required('Phone number is required'),
+  ResidencyAddress: Yup.string().required('Residency address is required'), 
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
     .required('Password is required'),

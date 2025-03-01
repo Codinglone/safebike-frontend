@@ -1,3 +1,4 @@
+// src/pages/passenger/CreatePackage.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
@@ -10,6 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { createPackage, PackageData } from '../../api/packages';
 
+interface PackageFormValues extends PackageData {}
+
 const CreatePackageSchema = Yup.object().shape({
   recipientName: Yup.string().required('Recipient name is required'),
   recipientPhone: Yup.string().required('Recipient phone is required'),
@@ -17,7 +20,10 @@ const CreatePackageSchema = Yup.object().shape({
   pickupLocation: Yup.string().required('Pickup location is required'),
   deliveryLocation: Yup.string().required('Delivery location is required'),
   description: Yup.string().required('Package description is required'),
-  estimatedValue: Yup.number().required('Estimated value is required').min(0, 'Value must be positive'),
+  estimatedValue: Yup.number()
+    .required('Estimated value is required')
+    .min(0, 'Value must be positive')
+    .typeError('Amount must be a number'),
 });
 
 const CreatePackage = () => {
@@ -25,10 +31,20 @@ const CreatePackage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = async (values: PackageData) => {
+  const handleSubmit = async (values: PackageFormValues) => {
     setIsSubmitting(true);
     try {
-      await createPackage(values);
+      console.log('Sending package data:', values); // Debug log
+      
+      // Convert estimatedValue to a number if it's a string
+      const packageData = {
+        ...values,
+        estimatedValue: typeof values.estimatedValue === 'string' 
+          ? parseFloat(values.estimatedValue) 
+          : values.estimatedValue
+      };
+      
+      await createPackage(packageData);
       
       toast({
         title: 'Package created!',
@@ -39,9 +55,11 @@ const CreatePackage = () => {
       
       navigate('/passenger/packages');
     } catch (error: any) {
+      console.error('Package creation error:', error.response?.data || error); // Debug
+      
       toast({
         title: 'Failed to create package',
-        description: error.response?.data?.error || 'An error occurred',
+        description: error.response?.data?.message || error.response?.data?.error || 'An error occurred',
         status: 'error',
         duration: 5000,
       });
@@ -67,7 +85,7 @@ const CreatePackage = () => {
         validationSchema={CreatePackageSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors, touched, setFieldValue }) => (
+        {({ errors, touched, setFieldValue, values }) => (
           <Form>
             <VStack spacing={4} align="stretch">
               <FormControl isInvalid={!!errors.recipientName && !!touched.recipientName}>
@@ -108,21 +126,17 @@ const CreatePackage = () => {
               
               <FormControl isInvalid={!!errors.estimatedValue && !!touched.estimatedValue}>
                 <FormLabel>Estimated Value (RWF)</FormLabel>
-                <Field name="estimatedValue">
-                  {({ field }: { field: any }) => (
-                    <NumberInput
-                      min={0}
-                      onChange={(valueString) => setFieldValue('estimatedValue', parseFloat(valueString))}
-                      value={field.value}
-                    >
-                      <NumberInputField {...field} />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                  )}
-                </Field>
+                <NumberInput
+                  min={0}
+                  onChange={(valueString) => setFieldValue('estimatedValue', parseFloat(valueString))}
+                  value={values.estimatedValue}
+                >
+                  <NumberInputField name="estimatedValue" />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
                 <FormErrorMessage>{errors.estimatedValue}</FormErrorMessage>
               </FormControl>
               
