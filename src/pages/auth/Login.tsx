@@ -32,7 +32,11 @@ const Login = () => {
     setIsSubmitting(true);
     try {
       const response = await login(values.email, values.password, values.userType);
-      authLogin(response.user, response.token);
+      const userData = {
+        ...response.user,
+        userType: values.userType // Ensure userType is explicitly set
+      };
+      authLogin(userData, response.token);
       
       toast({
         title: 'Login successful!',
